@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,29 +9,26 @@ public class StatController : MonoBehaviour
     public static StatController Instance;
 
     #region UI
-    public Slider ShieldSlider;
-    public Slider LifeSupportSlider;
-    public Slider ThrusterPowerSlider;
-    public Slider AuxPowerSlider;
+    public TMP_Text ShieldValueText;
+    public TMP_Text LifeSupportValueText;
+    public TMP_Text AuxPowerValueText;
+
     public Slider StarterPowerSlider;
 
 
     public Slider ShieldFactorSlider;
     public Slider LifeSupportFactorSlider;
-    public Slider ThrusterFactorSlider;
 
     #endregion 
 
     public float LifeSupport = 50;
     public float Shields = 50;
-    public float ThrusterPower = 50;
 
     public float AuxPower = 50;
     public float StarterPower = 0;
 
     public float ShieldFactor = 0.5f;
     public float LifeSupportFactor = 0.5f;
-    public float ThrusterPowerFactor = 0.5f;
 
 
 
@@ -43,40 +41,32 @@ public class StatController : MonoBehaviour
     {
         if (LifeSupport + delta < 0 || LifeSupport + delta > 100) return;
         LifeSupport += delta;
-        LifeSupportSlider.value = LifeSupport / 100f;
+        LifeSupportValueText.text = Mathf.CeilToInt(LifeSupport) + "%";
     }
 
     public void SetShields(float delta)
     {
         if (Shields + delta < 0 || Shields + delta > 100) return;
         Shields += delta;
-        ShieldSlider.value = Shields / 100f;
+        ShieldValueText.text = Mathf.CeilToInt(Shields) + "%";
     }
-
-    public void SetThrusterPower(float delta)
-    {
-        if (ThrusterPower + delta < 0 || ThrusterPower + delta > 100) return;
-        ThrusterPower += delta;
-        ThrusterPowerSlider.value = ThrusterPower / 100f;
-    }
+    
 
 
     public void SetAuxPower(float delta)
     {
         if (AuxPower + delta < 0 || AuxPower + delta > 100) return;
         AuxPower += delta;
-        AuxPowerSlider.value = AuxPower / 100f;
+        AuxPowerValueText.text = Mathf.CeilToInt(AuxPower) + "MWt";
         if(delta > 0)
         {
             SetShields(delta * ShieldFactor);
             SetLifeSupport(delta * LifeSupportFactor);
-            SetThrusterPower(delta * ThrusterPowerFactor);
         }
         else
         {
             SetShields(delta);
             SetLifeSupport(delta);
-            SetThrusterPower(delta);
         }
 
     }
@@ -101,11 +91,6 @@ public class StatController : MonoBehaviour
         LifeSupportFactorSlider.value = LifeSupportFactor;
 
     }
-    public void SetThrusterPowerFactor(float delta)
-    {
-        ThrusterPowerFactor += delta;
-        ThrusterFactorSlider.value = ThrusterPowerFactor;
-    }
 
     public void OnAddShieldFactor(float add)
     {
@@ -113,7 +98,6 @@ public class StatController : MonoBehaviour
 
         SetShieldFactor(add);
         SetLifeSupportFactor(-add / 2);
-        SetThrusterPowerFactor(-add / 2);
     }
     public void OnAddLifeSupportFactor(float add)
     {
@@ -121,14 +105,5 @@ public class StatController : MonoBehaviour
 
         SetShieldFactor(- add / 2);
         SetLifeSupportFactor(add);
-        SetThrusterPowerFactor(-add / 2);
-    }
-    public void OnAddThrusterFactor(float add)
-    {
-        if (ThrusterPowerFactor + add < 0 || ThrusterPowerFactor + add > 1) return;
-
-        SetShieldFactor(- add / 2);
-        SetLifeSupportFactor(-add / 2);
-        SetThrusterPowerFactor(add);
     }
 }

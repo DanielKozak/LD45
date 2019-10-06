@@ -7,17 +7,21 @@ using System;
 
 public class ShipController : MonoBehaviour
 {
+    public static ShipController Instance;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     #region UI
 
     public TMP_Text MainAlertLabel;
+    public TMP_Text ToolTipText;
+
     public Camera MainCam;
     
-
-
     #endregion
-
-    public Action OnSpacePressed { get; set; }
+    
 
 
 

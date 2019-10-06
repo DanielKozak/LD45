@@ -41,6 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: World
+  - name: Inside
     uniqueID: 1257586343
+    locked: 0
+  - name: Airlock
+    uniqueID: 2296811421
+    locked: 0
+  - name: Walls
+    uniqueID: 3585002263
     locked: 0

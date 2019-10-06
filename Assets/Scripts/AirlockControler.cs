@@ -8,10 +8,12 @@ public class AirlockControler : MonoBehaviour
     public enum State {
         Open,
         Closed,
-        
     }
     public Light2D IndicatorLight;
     public SpriteRenderer IndicatorSprite;
+
+    public SpriteRenderer onnSprite;
+    public SpriteRenderer offSprite;
 
     public bool isOpen = false;
 
@@ -44,6 +46,9 @@ public class AirlockControler : MonoBehaviour
     }
     public IEnumerator CloseAndDepressurize()
     {
+
+        offSprite.gameObject.SetActive(true);
+        onnSprite.gameObject.SetActive(false);
         while (gameObject.transform.position.y >= -14)
         {
             gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - Time.deltaTime * openSpeed, gameObject.transform.position.z);
@@ -65,12 +70,13 @@ public class AirlockControler : MonoBehaviour
         charging = true;
         yield return new WaitForSecondsRealtime(10f);
         charging = false;
-        GreenLight();
 
     }
     public IEnumerator PressurizeAndOpen()
     {
         //TODO: Play sound
+        offSprite.gameObject.SetActive(false);
+        onnSprite.gameObject.SetActive(true);
         yield return new WaitForSecondsRealtime(5f);
         GreenLight();
         StartCoroutine(Open());
@@ -86,5 +92,10 @@ public class AirlockControler : MonoBehaviour
         {
             StartCoroutine(CloseAndDepressurize());
         }
+    }
+
+    public void Interact()
+    {
+
     }
 }
