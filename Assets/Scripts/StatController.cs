@@ -39,8 +39,31 @@ public class StatController : MonoBehaviour
 
     public void SetLifeSupport(float delta)
     {
-        if (LifeSupport + delta < 0 || LifeSupport + delta > 100) return;
+        if(LifeSupport + delta < 0)
+        {
+            ShipController.Instance.DieLifeSupport();
+            return;
+        }
+        if (LifeSupport + delta > 100) return;
         LifeSupport += delta;
+        if(LifeSupport < 50)
+        {
+            AlarmManager.Instance.StartAlarmLifeSupportLow();
+        }
+        if(LifeSupport < 25)
+        {
+            AlarmManager.Instance.StartAlarmLifeSupportCritical();
+        }
+        if (LifeSupport > 50)
+        {
+            AlarmManager.Instance.StopAlarmLifeSupportLow();
+        }
+        if (LifeSupport > 25)
+        {
+            AlarmManager.Instance.StopAlarmLifeSupportCritical();
+        }
+
+
         LifeSupportValueText.text = Mathf.CeilToInt(LifeSupport) + "%";
     }
 
@@ -48,6 +71,22 @@ public class StatController : MonoBehaviour
     {
         if (Shields + delta < 0 || Shields + delta > 100) return;
         Shields += delta;
+        if (Shields < 50)
+        {
+            AlarmManager.Instance.StartAlarmLifeSupportLow();
+        }
+        if (Shields < 25)
+        {
+            AlarmManager.Instance.StartAlarmLifeSupportCritical();
+        }
+        if (Shields > 50)
+        {
+            AlarmManager.Instance.StopAlarmLifeSupportLow();
+        }
+        if (Shields > 25)
+        {
+            AlarmManager.Instance.StopAlarmLifeSupportCritical();
+        }
         ShieldValueText.text = Mathf.CeilToInt(Shields) + "%";
     }
     
@@ -57,6 +96,23 @@ public class StatController : MonoBehaviour
     {
         if (AuxPower + delta < 0 || AuxPower + delta > 100) return;
         AuxPower += delta;
+        if (AuxPower < 50)
+        {
+            AlarmManager.Instance.StartAlarmLifeSupportLow();
+        }
+        if (AuxPower < 25)
+        {
+            AlarmManager.Instance.StartAlarmLifeSupportCritical();
+        }
+        if (AuxPower > 50)
+        {
+            AlarmManager.Instance.StopAlarmLifeSupportLow();
+        }
+        if (AuxPower > 25)
+        {
+            AlarmManager.Instance.StopAlarmLifeSupportCritical();
+        }
+
         AuxPowerValueText.text = Mathf.CeilToInt(AuxPower) + "MWt";
         if(delta > 0)
         {
@@ -74,7 +130,12 @@ public class StatController : MonoBehaviour
 
     public void SetStarterPower(float delta)
     {
-        if (StarterPower + delta < 0 || StarterPower + delta > 100) return;
+        if (StarterPower + delta < 0) return;
+        if(StarterPower + delta > 100)
+        {
+            ShipController.Instance.Win();
+            return;
+        }
         StarterPower += delta;
         StarterPowerSlider.value = StarterPower / 100f;
     }

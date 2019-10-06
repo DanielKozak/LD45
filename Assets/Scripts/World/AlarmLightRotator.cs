@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.LWRP;
 
 public class AlarmLightRotator : MonoBehaviour
 {
@@ -9,9 +10,10 @@ public class AlarmLightRotator : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(Rotating());
+        gameObject.GetComponent<Light2D>().enabled = false;
 
     }
+
     public IEnumerator Rotating()
     {
         while (true)
@@ -20,9 +22,16 @@ public class AlarmLightRotator : MonoBehaviour
             yield return null;
         }
     }
-    // Update is called once per frame
-    void Update()
+
+    public void StartRotating()
     {
-        
+        gameObject.GetComponent<Light2D>().enabled = true;
+        StartCoroutine(Rotating());
+    }
+
+    public void StopRotating()
+    {
+        gameObject.GetComponent<Light2D>().enabled = false ;
+        StartCoroutine(Rotating());
     }
 }
