@@ -1,17 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public TMP_Text Tooltip;
+
     private enum PlayerState
     {
         Floating,
         Grabbing
     }
+    private enum PlayerOrientation
+    {
+        Vertical, Horizontal
+    }
+
+    private PlayerOrientation orientationState = PlayerOrientation.Vertical;
 
     private PlayerState motionState = PlayerState.Grabbing;
-    private float JumpCharge = 0f;
+    private float JumpCharge = 5f;
 
     public Camera MainCam;
 
@@ -21,6 +30,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.freezeRotation = true;
+
     }
 
     // Update is called once per frame
@@ -33,7 +44,9 @@ public class PlayerController : MonoBehaviour
         pos = transform.position;
         if (Input.GetMouseButton(0))
         {
-            JumpCharge += 0.2f;
+            if (motionState == PlayerState.Floating) return;
+            rb.velocity = new Vector2(0, 0);
+            if (JumpCharge < 30) JumpCharge += 0.5f;
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -43,7 +56,7 @@ public class PlayerController : MonoBehaviour
                 jumpDirection = mousePos - pos;
                 Jump(jumpDirection);
             }
-            JumpCharge = 0f;
+            JumpCharge = 5f;
 
         }
 
@@ -54,15 +67,40 @@ public class PlayerController : MonoBehaviour
         rb.AddForce(direction, ForceMode2D.Force);
         rb.velocity = (direction.normalized * JumpCharge);
         motionState = PlayerState.Floating;
+        orientationState = PlayerOrientation.Vertical;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("COLLISION");
         rb.velocity = new Vector2(0,0);
-        rb.freezeRotation = true;
+        //Tooltip.gameObject.transform.rotation = Quaternion.identity;
         motionState = PlayerState.Grabbing;
-        rb.freezeRotation = false;
+        if(collision.gameObject.GetComponent<Surface>().Orient == Surface.Orientation.Vertical)
+        {
+            orientationState = PlayerOrientation.Vertical;
+        }
+        else
+        {
+            orientationState = PlayerOrientation.Horizontal;
+        }
 
+        Debug.Log("COLLISION " + orientationState);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.name == "TriggerManualGenerator")
+        { 
+            Debug.Log("Manual Generator enter");
+            Tooltip.text = "SPACE to interact";
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.name == "TriggerManualGenerator")
+        {
+            Debug.Log("Manual Generator exit");
+            Tooltip.text = "";
+        }
     }
 }
