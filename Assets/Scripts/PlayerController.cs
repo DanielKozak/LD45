@@ -125,14 +125,14 @@ public class PlayerController : MonoBehaviour
         pos = transform.position;
         if (Input.GetMouseButton(0))
         {
-            //if (!EventSystem.current.IsPointerOverGameObject()) return;
+            if(EventSystem.current.IsPointerOverGameObject()) return;
             if (motionState == PlayerState.Floating) return;
             rb.velocity = new Vector2(0, 0);
             if (JumpCharge < 30) JumpCharge += 0.5f;
         }
         if (Input.GetMouseButtonUp(0))
         {
-            //if (!EventSystem.current.IsPointerOverGameObject()) return;
+            if(EventSystem.current.IsPointerOverGameObject()) return;
             if (motionState == PlayerState.Grabbing)
             {
                 mousePos = MainCam.ScreenToWorldPoint(Input.mousePosition);
