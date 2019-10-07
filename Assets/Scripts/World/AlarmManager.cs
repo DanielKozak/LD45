@@ -161,13 +161,13 @@ public class AlarmManager : MonoBehaviour
         if (LifeSupportCriticalRunning) return;
         LifeSupportCriticalRunning = true;
         //PLAySOUND CONTINUOUSLY
-        AlarmMessageList.Add("SHIELDS CRITICAL");
+        AlarmMessageList.Add("LIFE SUPPORT CRITICAL");
         StopAlarmLifeSupportLow();
     }
     public void StopAlarmLifeSupportCritical()
     {
         LifeSupportCriticalRunning = false;
-        AlarmMessageList.Remove("SHIELDS CRITICAL");
+        AlarmMessageList.Remove("LIFE SUPPORT CRITICAL");
     }
 
 
