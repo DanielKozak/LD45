@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     public TMP_Text Tooltip;
 
-    private enum PlayerState
+    public enum PlayerState
     {
         Floating,
         Grabbing
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerOrientation orientationState = PlayerOrientation.Vertical;
 
-    private PlayerState motionState = PlayerState.Grabbing;
+    public PlayerState motionState = PlayerState.Grabbing;
     private float JumpCharge = 5f;
 
     public Camera MainCam;
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
@@ -125,25 +127,52 @@ public class PlayerController : MonoBehaviour
         pos = transform.position;
         if (Input.GetMouseButton(0))
         {
-            //if(EventSystem.current.IsPointerOverGameObject()) return;
+            if (!CheckNothitPanel()) return;
             if (motionState == PlayerState.Floating) return;
             rb.velocity = new Vector2(0, 0);
             if (JumpCharge < 30) JumpCharge += 0.5f;
         }
         if (Input.GetMouseButtonUp(0))
         {
-            //if(EventSystem.current.IsPointerOverGameObject()) return;
+            if (!CheckNothitPanel()) return;
+
             if (motionState == PlayerState.Grabbing)
             {
                 mousePos = MainCam.ScreenToWorldPoint(Input.mousePosition);
-                jumpDirection = mousePos - pos;
-                Jump(jumpDirection);
-            }
+                
+                    jumpDirection = mousePos - pos;
+                    Jump(jumpDirection);
+                
+                }
             JumpCharge = 5f;
 
         }
 
     }
+    Vector3[] wc = new Vector3[4];
+
+    private bool CheckNothitPanel()
+    {
+        Vector2 mousePos = Input.mousePosition;
+        hpl.GetWorldCorners(wc);
+        Debug.Log(mousePos);
+        Debug.Log(wc[0]); Debug.Log(wc[2]);
+
+
+
+        if (mousePos.x <= wc[0].x || mousePos.x >= wc[2].x)
+            if (mousePos.y >= wc[0].y || mousePos.y <= wc[2].y)
+            {
+                Debug.Log("no");
+                return true;
+
+            }
+        Debug.Log("yes");
+
+        return false; ;
+    }
+
+    public RectTransform hpl;
 
     void Jump(Vector2 direction)
     {
@@ -152,7 +181,6 @@ public class PlayerController : MonoBehaviour
         transform.localScale = new Vector3(Mathf.Sign(rb.velocity.x), 1, 1);
         BatteryController.Instance.followOffset = new Vector3(BatteryController.Instance.followOffset.x - Mathf.Sign(rb.velocity.x)*BatteryController.Instance.followOffset.x, 0, 0);
 
-        motionState = PlayerState.Floating;
         orientationState = PlayerOrientation.Vertical;
     }
 
@@ -163,6 +191,12 @@ public class PlayerController : MonoBehaviour
         motionState = PlayerState.Grabbing;
 
         Debug.Log("COLLISION ");
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        motionState = PlayerState.Floating;
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

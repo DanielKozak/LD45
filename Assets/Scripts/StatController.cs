@@ -73,19 +73,19 @@ public class StatController : MonoBehaviour
         Shields += delta;
         if (Shields < 50)
         {
-            AlarmManager.Instance.StartAlarmLifeSupportLow();
+            AlarmManager.Instance.StartAlarmShieldsLow();
         }
         if (Shields < 25)
         {
-            AlarmManager.Instance.StartAlarmLifeSupportCritical();
+            AlarmManager.Instance.StartAlarmShieldsCritical();
         }
         if (Shields > 50)
         {
-            AlarmManager.Instance.StopAlarmLifeSupportLow();
+            AlarmManager.Instance.StopAlarmShieldsLow();
         }
         if (Shields > 25)
         {
-            AlarmManager.Instance.StopAlarmLifeSupportCritical();
+            AlarmManager.Instance.StopAlarmShieldsCritical();
         }
         ShieldValueText.text = Mathf.CeilToInt(Shields) + "%";
     }
@@ -98,19 +98,11 @@ public class StatController : MonoBehaviour
         AuxPower += delta;
         if (AuxPower < 50)
         {
-            AlarmManager.Instance.StartAlarmLifeSupportLow();
-        }
-        if (AuxPower < 25)
-        {
-            AlarmManager.Instance.StartAlarmLifeSupportCritical();
+            AlarmManager.Instance.StartAlarmAuxLow();
         }
         if (AuxPower > 50)
         {
-            AlarmManager.Instance.StopAlarmLifeSupportLow();
-        }
-        if (AuxPower > 25)
-        {
-            AlarmManager.Instance.StopAlarmLifeSupportCritical();
+            AlarmManager.Instance.StopAlarmAuxLow();
         }
 
         AuxPowerValueText.text = Mathf.CeilToInt(AuxPower) + "MWt";

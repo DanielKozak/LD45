@@ -9034,6 +9034,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Tooltip: {fileID: 564981350}
+  motionState: 1
   MainCam: {fileID: 1476073627}
   rb: {fileID: 1295272388}
   isBatteryAttached: 0
@@ -9042,6 +9043,7 @@ MonoBehaviour:
   inManGenTrigger: 0
   inAirlockTrigger: 0
   inReactorTrigger: 0
+  hpl: {fileID: 2037017322}
 --- !u!50 &1295272388
 Rigidbody2D:
   serializedVersion: 4
